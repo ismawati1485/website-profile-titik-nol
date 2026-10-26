@@ -8,30 +8,42 @@ import {
   type ComplexityLevel,
 } from "@/config/pricing";
 
+const defaultService = services[0]!;
+const defaultLevel = complexityLevels[1]!;
+
+type ChoiceOption = { label: string; name: string };
+
+const serviceOptions: ChoiceOption[] = services.map((s) => ({
+  label: s.name,
+  name: `service-${s.slug}`,
+}));
+const levelOptions: ChoiceOption[] = complexityLevels.map((l) => ({
+  label: l.label,
+  name: `complexity-${l.value}`,
+}));
+
 function ChoiceGroup({
   options,
   selected,
   onSelect,
   label,
-  nameKey,
 }: {
-  options: { label: string }[];
+  options: readonly ChoiceOption[];
   selected: string;
   onSelect: (value: string) => void;
   label: string;
-  nameKey: (index: number) => string;
 }) {
   return (
     <fieldset>
       <legend className="overline text-muted-foreground">{label}</legend>
       <div className="mt-3 flex flex-wrap gap-2">
-        {options.map((option, index) => {
+        {options.map((option) => {
           const active = selected === option.label;
           return (
             <button
               key={option.label}
               type="button"
-              name={nameKey(index)}
+              name={option.name}
               aria-pressed={active}
               onClick={() => onSelect(option.label)}
               className={`border px-4 py-2 text-sm font-medium transition-colors ${
@@ -50,13 +62,14 @@ function ChoiceGroup({
 }
 
 export function Estimator() {
-  const [serviceName, setServiceName] = useState(services[0].name);
+  const [serviceName, setServiceName] = useState(defaultService.name);
   const [levelLabel, setLevelLabel] = useState<ComplexityLevel["label"]>(
-    complexityLevels[1].label,
+    defaultLevel.label,
   );
 
-  const service = services.find((s) => s.name === serviceName) ?? services[0];
-  const level = complexityLevels.find((l) => l.label === levelLabel) ?? complexityLevels[1];
+  const service = services.find((s) => s.name === serviceName) ?? defaultService;
+  const level =
+    complexityLevels.find((l) => l.label === levelLabel) ?? defaultLevel;
   const estimate = estimateFor(service, level);
 
   return (
@@ -65,17 +78,15 @@ export function Estimator() {
         <div className="space-y-8">
           <ChoiceGroup
             label="Jenis layanan"
-            options={services}
+            options={serviceOptions}
             selected={service.name}
             onSelect={setServiceName}
-            nameKey={(i) => `service-${services[i].slug}`}
           />
           <ChoiceGroup
             label="Kompleksitas pekerjaan"
-            options={[...complexityLevels]}
+            options={levelOptions}
             selected={level.label}
             onSelect={(value) => setLevelLabel(value as ComplexityLevel["label"])}
-            nameKey={(i) => `complexity-${complexityLevels[i].value}`}
           />
         </div>
 
