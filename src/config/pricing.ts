@@ -73,11 +73,14 @@ export const complexityLevels = [
 export type ComplexityLevel = (typeof complexityLevels)[number];
 
 export function formatIDR(value: number): string {
+  // Locale id-ID menghasilkan "Rp 1.200.000" (dengan spasi); rapatkan menjadi "Rp1.200.000".
   return new Intl.NumberFormat("id-ID", {
     style: "currency",
     currency: "IDR",
     maximumFractionDigits: 0,
-  }).format(value);
+  })
+    .format(value)
+    .replace(/^Rp\s+/u, "Rp");
 }
 
 /** Contoh: "Rp300.000 – Rp700.000" atau "mulai Rp2.000.000". */
