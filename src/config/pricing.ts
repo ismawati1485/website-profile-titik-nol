@@ -16,7 +16,7 @@ export type Service = {
   slug: string;
   name: string;
   summary: string;
-  tiers: PriceTier[];
+  tiers: [PriceTier, ...PriceTier[]];
 };
 
 export const services: Service[] = [
