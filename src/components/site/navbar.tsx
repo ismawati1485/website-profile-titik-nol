@@ -25,7 +25,7 @@ export function Navbar() {
             <Link
               key={item.label}
               to={item.to}
-              hash={"hash" in item ? item.hash : undefined}
+              {...("hash" in item ? { hash: item.hash } : {})}
               className={`text-sm font-medium transition-colors ${
                 isActive(item.to, "hash" in item ? item.hash : undefined)
                   ? "text-foreground underline underline-offset-8"
@@ -62,7 +62,7 @@ export function Navbar() {
               <li key={item.label}>
                 <Link
                   to={item.to}
-                  hash={"hash" in item ? item.hash : undefined}
+                  {...("hash" in item ? { hash: item.hash } : {})}
                   onClick={() => setOpen(false)}
                   className={`block py-2 text-sm font-medium ${
                     isActive(item.to, "hash" in item ? item.hash : undefined)
