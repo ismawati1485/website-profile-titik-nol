@@ -55,7 +55,7 @@ export function Estimator() {
     complexityLevels[1].label,
   );
 
-  const service = services.find((s) => s.name === serviceName) ?? services[0];
+  const service = services.find((s) => s.name === serviceName) ?? services[0]!;
   const level = complexityLevels.find((l) => l.label === levelLabel) ?? complexityLevels[1];
   const estimate = estimateFor(service, level);
 
