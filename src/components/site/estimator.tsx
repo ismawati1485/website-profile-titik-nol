@@ -8,14 +8,18 @@ import {
   type ComplexityLevel,
 } from "@/config/pricing";
 
+const defaultService = services[0]!;
+const defaultLevel = complexityLevels[1]!;
+
 export function Estimator() {
-  const [serviceName, setServiceName] = useState(services[0].name);
+  const [serviceName, setServiceName] = useState(defaultService.name);
   const [levelLabel, setLevelLabel] = useState<ComplexityLevel["label"]>(
-    complexityLevels[1].label,
+    defaultLevel.label,
   );
 
-  const service = services.find((s) => s.name === serviceName) ?? services[0];
-  const level = complexityLevels.find((l) => l.label === levelLabel) ?? complexityLevels[1];
+  const service = services.find((s) => s.name === serviceName) ?? defaultService;
+  const level =
+    complexityLevels.find((l) => l.label === levelLabel) ?? defaultLevel;
   const estimate = estimateFor(service, level);
 
   const complexityDescriptions: Record<string, string> = {

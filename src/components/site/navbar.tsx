@@ -48,7 +48,7 @@ export function Navbar() {
               <Link
                 key={item.label}
                 to={item.to}
-                hash={itemHash}
+                {...(itemHash ? { hash: itemHash } : {})}
                 className={`py-1 text-xs font-semibold uppercase tracking-[0.2em] transition-colors ${
                   active
                     ? "border-b-2 border-[#111111] font-bold text-[#111111]"
@@ -67,7 +67,7 @@ export function Navbar() {
             <span>MULAI PROYEK</span>
             <span aria-hidden="true">→</span>
           </Link>
-        </nav>
+        </nav>j
 
         {/* Mobile menu trigger */}
         <button
@@ -92,7 +92,7 @@ export function Navbar() {
                 <li key={item.label}>
                   <Link
                     to={item.to}
-                    hash={itemHash}
+                    {...(itemHash ? { hash: itemHash } : {})}
                     onClick={() => setOpen(false)}
                     className={`block py-2.5 text-xs font-semibold uppercase tracking-[0.2em] ${
                       active

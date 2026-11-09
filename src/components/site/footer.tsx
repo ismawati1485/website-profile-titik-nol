@@ -46,7 +46,7 @@ export function Footer() {
                 <li key={item.label}>
                   <Link
                     to={item.to}
-                    hash={"hash" in item ? item.hash : undefined}
+                    {...("hash" in item && item.hash ? { hash: item.hash } : {})}
                     className="text-xs sm:text-sm font-semibold uppercase tracking-wider text-white/80 transition-colors hover:text-white underline-offset-4 hover:underline"
                   >
                     {item.label}
