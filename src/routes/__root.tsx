@@ -90,9 +90,9 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: `${siteConfig.name} — Studio Digital` },
+      { title: `${siteConfig.name} — Layanan Pembuatan Website` },
       { name: "description", content: siteConfig.description },
-      { property: "og:title", content: `${siteConfig.name} — Studio Digital` },
+      { property: "og:title", content: `${siteConfig.name} — Layanan Pembuatan Website` },
       { property: "og:description", content: siteConfig.description },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
@@ -106,7 +106,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       },
       {
         rel: "stylesheet",
-        href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600&display=swap",
+        href: "https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap",
       },
       { rel: "stylesheet", href: appCss },
       { rel: "icon", href: "/favicon.ico", type: "image/x-icon" },
@@ -137,10 +137,10 @@ function RootComponent() {
 
   return (
     <QueryClientProvider client={queryClient}>
-      <div className="flex min-h-screen flex-col bg-background">
+      <div className="flex min-h-screen max-w-full flex-col overflow-x-hidden bg-background">
         <Navbar />
         {/* Nested routes render here. Removing <Outlet /> breaks all child routes. */}
-        <main className="flex-1">
+        <main className="flex-1 max-w-full overflow-x-hidden">
           <Outlet />
         </main>
         <Footer />

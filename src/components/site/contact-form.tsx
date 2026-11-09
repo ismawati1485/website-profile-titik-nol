@@ -1,7 +1,7 @@
 import { useState, type FormEvent } from "react";
 
 import { services } from "@/config/pricing";
-import { buildWhatsAppUrl, isWhatsAppConfigured } from "@/config/site";
+import { buildWhatsAppUrl } from "@/config/site";
 
 type FormState = {
   nama: string;
@@ -52,9 +52,10 @@ function composeMessage(form: FormState): string {
 }
 
 const inputClass =
-  "w-full border border-input bg-background px-3 py-2.5 text-sm outline-none transition-colors placeholder:text-muted-foreground/70 focus:border-foreground focus:ring-1 focus:ring-foreground";
+  "w-full border border-[#111111]/25 bg-[#F9F9F7] px-3.5 py-3 text-sm text-[#111111] rounded-none outline-none transition-colors placeholder:text-[#999999] focus:border-[#111111] focus:bg-white focus:ring-1 focus:ring-[#111111]";
 
-const labelClass = "mb-1.5 block text-sm font-medium";
+const labelClass =
+  "mb-1.5 flex items-center justify-between font-mono text-[11px] font-bold uppercase tracking-[0.15em] text-[#111111]";
 
 export function ContactForm() {
   const [form, setForm] = useState<FormState>(initialForm);
@@ -99,187 +100,271 @@ export function ContactForm() {
   };
 
   return (
-    <div className="grid gap-10 lg:grid-cols-2">
-      <form onSubmit={handleSubmit} noValidate className="space-y-5">
-        <div className="grid gap-5 sm:grid-cols-2">
-          <div>
-            <label htmlFor="kontak-nama" className={labelClass}>
-              Nama <span className="text-muted-foreground">*</span>
-            </label>
-            <input
-              id="kontak-nama"
-              value={form.nama}
-              maxLength={limits.nama}
-              onChange={(e) => set("nama", e.target.value)}
-              placeholder="Nama Anda"
-              className={inputClass}
-            />
-            {errors.nama && <p className="mt-1 text-xs text-destructive">{errors.nama}</p>}
-          </div>
-          <div>
-            <label htmlFor="kontak-bisnis" className={labelClass}>
-              Bisnis
-            </label>
-            <input
-              id="kontak-bisnis"
-              value={form.bisnis}
-              maxLength={limits.bisnis}
-              onChange={(e) => set("bisnis", e.target.value)}
-              placeholder="Nama bisnis / instansi"
-              className={inputClass}
-            />
-          </div>
-        </div>
+    <div className="relative border border-[#111111]/15 bg-white p-6 sm:p-8 lg:p-10">
+      {/* Ornamen sudut crosshair */}
+      <span
+        className="pointer-events-none absolute -top-2.5 -left-2.5 font-mono text-xs font-light text-[#111111]/30 select-none"
+        aria-hidden="true"
+      >
+        +
+      </span>
+      <span
+        className="pointer-events-none absolute -top-2.5 -right-2.5 font-mono text-xs font-light text-[#111111]/30 select-none"
+        aria-hidden="true"
+      >
+        +
+      </span>
+      <span
+        className="pointer-events-none absolute -bottom-2.5 -left-2.5 font-mono text-xs font-light text-[#111111]/30 select-none"
+        aria-hidden="true"
+      >
+        +
+      </span>
+      <span
+        className="pointer-events-none absolute -bottom-2.5 -right-2.5 font-mono text-xs font-light text-[#111111]/30 select-none"
+        aria-hidden="true"
+      >
+        +
+      </span>
 
-        <div>
-          <label htmlFor="kontak-layanan" className={labelClass}>
-            Layanan <span className="text-muted-foreground">*</span>
-          </label>
-          <select
-            id="kontak-layanan"
-            value={form.layanan}
-            onChange={(e) => set("layanan", e.target.value)}
-            className={inputClass}
-          >
-            <option value="">Pilih layanan…</option>
-            {services.map((service) => (
-              <option key={service.slug} value={service.name}>
-                {service.name}
-              </option>
-            ))}
-          </select>
-          {errors.layanan && (
-            <p className="mt-1 text-xs text-destructive">{errors.layanan}</p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="kontak-kebutuhan" className={labelClass}>
-            Kebutuhan <span className="text-muted-foreground">*</span>
-          </label>
-          <textarea
-            id="kontak-kebutuhan"
-            value={form.kebutuhan}
-            maxLength={limits.kebutuhan}
-            onChange={(e) => set("kebutuhan", e.target.value)}
-            placeholder="Ceritakan singkat kebutuhan proyek Anda"
-            rows={4}
-            className={inputClass}
-          />
-          {errors.kebutuhan && (
-            <p className="mt-1 text-xs text-destructive">{errors.kebutuhan}</p>
-          )}
-        </div>
-
-        <div>
-          <label htmlFor="kontak-fitur" className={labelClass}>
-            Fitur yang diinginkan
-          </label>
-          <textarea
-            id="kontak-fitur"
-            value={form.fitur}
-            maxLength={limits.fitur}
-            onChange={(e) => set("fitur", e.target.value)}
-            placeholder="Contoh: formulir kontak, galeri, pendaftaran…"
-            rows={2}
-            className={inputClass}
-          />
-        </div>
-
-        <div className="grid gap-5 sm:grid-cols-2">
-          <div>
-            <label htmlFor="kontak-budget" className={labelClass}>
-              Budget
-            </label>
-            <input
-              id="kontak-budget"
-              value={form.budget}
-              maxLength={limits.budget}
-              onChange={(e) => set("budget", e.target.value)}
-              placeholder="Bebas, mis. Rp1–2 juta"
-              className={inputClass}
-            />
-          </div>
-          <div>
-            <label htmlFor="kontak-target" className={labelClass}>
-              Target waktu
-            </label>
-            <input
-              id="kontak-target"
-              value={form.targetWaktu}
-              maxLength={limits.targetWaktu}
-              onChange={(e) => set("targetWaktu", e.target.value)}
-              placeholder="Mis. 2 minggu"
-              className={inputClass}
-            />
-          </div>
-        </div>
-
-        <div>
-          <label htmlFor="kontak-referensi" className={labelClass}>
-            Link referensi
-          </label>
-          <input
-            id="kontak-referensi"
-            value={form.referensi}
-            maxLength={limits.referensi}
-            onChange={(e) => set("referensi", e.target.value)}
-            placeholder="https://… (website yang Anda suka)"
-            type="url"
-            className={inputClass}
-          />
-          {errors.referensi && (
-            <p className="mt-1 text-xs text-destructive">{errors.referensi}</p>
-          )}
-        </div>
-
-        <button
-          type="submit"
-          className="w-full border border-foreground bg-foreground px-5 py-3 text-sm font-medium uppercase tracking-widest text-background transition-colors hover:bg-transparent hover:text-foreground sm:w-auto"
-        >
-          Susun Pesan WhatsApp
-        </button>
-      </form>
-
-      <div className="border border-border bg-secondary p-6">
-        <p className="overline text-muted-foreground">Pratinjau pesan</p>
-        {!message ? (
-          <p className="mt-3 text-sm text-muted-foreground">
-            Isi formulir lalu tekan "Susun Pesan WhatsApp". Pesan akan muncul
-            di sini untuk Anda periksa sebelum dikirim.
-          </p>
-        ) : (
-          <>
-            <pre className="mt-3 max-h-96 overflow-auto whitespace-pre-wrap break-words text-sm leading-relaxed">
-              {message}
-            </pre>
-            <div className="mt-5 flex flex-wrap gap-3">
-              {whatsappUrl ? (
-                <a
-                  href={whatsappUrl}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="border border-foreground bg-foreground px-5 py-2.5 text-sm font-medium text-background transition-colors hover:bg-transparent hover:text-foreground"
-                >
-                  Kirim via WhatsApp
-                </a>
-              ) : null}
-              <button
-                type="button"
-                onClick={copyMessage}
-                className="border border-border bg-background px-5 py-2.5 text-sm font-medium transition-colors hover:border-foreground"
-              >
-                {copied ? "Tersalin ✓" : "Salin pesan"}
-              </button>
+      <div className="grid gap-10 lg:grid-cols-12 lg:gap-12">
+        {/* Kolom Formulir */}
+        <form onSubmit={handleSubmit} noValidate className="space-y-6 lg:col-span-7">
+          <div className="flex items-center justify-between border-b border-[#111111]/15 pb-3">
+            <div className="flex items-center gap-2">
+              <span className="font-mono text-xs font-bold text-[#111111]/35">01</span>
+              <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#111111]">
+                DATA PROYEK
+              </span>
             </div>
-            {!whatsappUrl && (
-              <p className="mt-4 text-xs leading-relaxed text-muted-foreground">
-                Pengiriman langsung via WhatsApp belum aktif. Silakan salin
-                pesan ini dan kirimkan secara manual.
-              </p>
+            <span className="font-mono text-[10px] uppercase text-[#737373]">
+              * WAJIB DIISI
+            </span>
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label htmlFor="kontak-nama" className={labelClass}>
+                <span>Nama Lengkap</span>
+                <span className="text-[#dc2626] font-bold">*</span>
+              </label>
+              <input
+                id="kontak-nama"
+                value={form.nama}
+                maxLength={limits.nama}
+                onChange={(e) => set("nama", e.target.value)}
+                placeholder="Nama Anda"
+                className={inputClass}
+              />
+              {errors.nama && (
+                <p className="mt-1 font-mono text-xs text-[#dc2626]">{errors.nama}</p>
+              )}
+            </div>
+
+            <div>
+              <label htmlFor="kontak-bisnis" className={labelClass}>
+                <span>Nama Bisnis / Brand</span>
+                <span className="text-[#737373] font-normal lowercase">(opsional)</span>
+              </label>
+              <input
+                id="kontak-bisnis"
+                value={form.bisnis}
+                maxLength={limits.bisnis}
+                onChange={(e) => set("bisnis", e.target.value)}
+                placeholder="Nama bisnis atau instansi"
+                className={inputClass}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="kontak-layanan" className={labelClass}>
+              <span>Kategori Layanan</span>
+              <span className="text-[#dc2626] font-bold">*</span>
+            </label>
+            <select
+              id="kontak-layanan"
+              value={form.layanan}
+              onChange={(e) => set("layanan", e.target.value)}
+              className={inputClass}
+            >
+              <option value="">Pilih salah satu layanan…</option>
+              {services.map((service) => (
+                <option key={service.slug} value={service.name}>
+                  {service.name}
+                </option>
+              ))}
+            </select>
+            {errors.layanan && (
+              <p className="mt-1 font-mono text-xs text-[#dc2626]">{errors.layanan}</p>
             )}
-          </>
-        )}
+          </div>
+
+          <div>
+            <label htmlFor="kontak-kebutuhan" className={labelClass}>
+              <span>Ringkasan Kebutuhan</span>
+              <span className="text-[#dc2626] font-bold">*</span>
+            </label>
+            <textarea
+              id="kontak-kebutuhan"
+              value={form.kebutuhan}
+              maxLength={limits.kebutuhan}
+              onChange={(e) => set("kebutuhan", e.target.value)}
+              placeholder="Jelaskan tujuan dan gambaran proyek website yang ingin Anda bangun"
+              rows={4}
+              className={inputClass}
+            />
+            {errors.kebutuhan && (
+              <p className="mt-1 font-mono text-xs text-[#dc2626]">{errors.kebutuhan}</p>
+            )}
+          </div>
+
+          <div>
+            <label htmlFor="kontak-fitur" className={labelClass}>
+              <span>Fitur Khusus yang Diinginkan</span>
+              <span className="text-[#737373] font-normal lowercase">(opsional)</span>
+            </label>
+            <textarea
+              id="kontak-fitur"
+              value={form.fitur}
+              maxLength={limits.fitur}
+              onChange={(e) => set("fitur", e.target.value)}
+              placeholder="Contoh: integrasi payment gateway, multi-bahasa, katalog dinamis…"
+              rows={2}
+              className={inputClass}
+            />
+          </div>
+
+          <div className="grid gap-5 sm:grid-cols-2">
+            <div>
+              <label htmlFor="kontak-budget" className={labelClass}>
+                <span>Alokasi Budget</span>
+                <span className="text-[#737373] font-normal lowercase">(opsional)</span>
+              </label>
+              <input
+                id="kontak-budget"
+                value={form.budget}
+                maxLength={limits.budget}
+                onChange={(e) => set("budget", e.target.value)}
+                placeholder="Mis. Rp 1.000.000 – Rp 2.000.000"
+                className={inputClass}
+              />
+            </div>
+
+            <div>
+              <label htmlFor="kontak-target" className={labelClass}>
+                <span>Ekspektasi Timeline</span>
+                <span className="text-[#737373] font-normal lowercase">(opsional)</span>
+              </label>
+              <input
+                id="kontak-target"
+                value={form.targetWaktu}
+                maxLength={limits.targetWaktu}
+                onChange={(e) => set("targetWaktu", e.target.value)}
+                placeholder="Mis. 2-3 minggu"
+                className={inputClass}
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="kontak-referensi" className={labelClass}>
+              <span>Tautan Referensi Website</span>
+              <span className="text-[#737373] font-normal lowercase">(opsional)</span>
+            </label>
+            <input
+              id="kontak-referensi"
+              value={form.referensi}
+              maxLength={limits.referensi}
+              onChange={(e) => set("referensi", e.target.value)}
+              placeholder="https://… (referensi visual yang Anda sukai)"
+              type="url"
+              className={inputClass}
+            />
+            {errors.referensi && (
+              <p className="mt-1 font-mono text-xs text-[#dc2626]">{errors.referensi}</p>
+            )}
+          </div>
+
+          <button
+            type="submit"
+            className="w-full border border-[#111111] bg-[#111111] px-6 py-4 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-transparent hover:text-[#111111] cursor-pointer"
+          >
+            Susun Pesan WhatsApp →
+          </button>
+        </form>
+
+        {/* Kolom Pratinjau Pesan */}
+        <div className="flex flex-col justify-between border-t border-[#111111]/15 pt-8 lg:col-span-5 lg:border-l lg:border-t-0 lg:pl-10 lg:pt-0">
+          <div>
+            <div className="flex items-center justify-between border-b border-[#111111]/15 pb-3">
+              <div className="flex items-center gap-2">
+                <span className="h-2 w-2 bg-[#111111]" aria-hidden="true" />
+                <span className="font-mono text-xs font-bold uppercase tracking-[0.2em] text-[#111111]">
+                  PRATINJAU DOKUMEN
+                </span>
+              </div>
+              <span className="font-mono text-[10px] uppercase tracking-widest text-[#737373]">
+                {message ? "SIAP DIKIRIM" : "MENUNGGU FORMULIR"}
+              </span>
+            </div>
+
+            {!message ? (
+              <div className="mt-8 border border-dashed border-[#111111]/20 bg-[#F9F9F7] p-8 text-center">
+                <span className="font-mono text-xs text-[#737373] uppercase tracking-wider block">
+                  DRAF BELUM DIBUAT
+                </span>
+                <p className="mt-2 text-xs leading-relaxed text-[#666666]">
+                  Lengkapi data pada formulir di sebelah kiri, lalu klik tombol{" "}
+                  <strong>"Susun Pesan WhatsApp"</strong> untuk memeriksa hasil sebelum dikirimkan.
+                </p>
+              </div>
+            ) : (
+              <div className="mt-6 space-y-4">
+                <div className="border border-[#111111]/15 bg-[#F9F9F7] p-4">
+                  <pre className="max-h-96 overflow-auto whitespace-pre-wrap break-words font-mono text-xs leading-relaxed text-[#111111]">
+                    {message}
+                  </pre>
+                </div>
+
+                <div className="flex flex-col gap-2.5 sm:flex-row">
+                  {whatsappUrl ? (
+                    <a
+                      href={whatsappUrl}
+                      target="_blank"
+                      rel="noreferrer"
+                      className="inline-flex flex-1 items-center justify-center gap-2 border border-[#111111] bg-[#111111] px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-white transition-all hover:bg-transparent hover:text-[#111111]"
+                    >
+                      <span>Kirim via WhatsApp</span>
+                      <span aria-hidden="true">→</span>
+                    </a>
+                  ) : null}
+                  <button
+                    type="button"
+                    onClick={copyMessage}
+                    className="inline-flex items-center justify-center gap-2 border border-[#111111]/30 bg-white px-5 py-3 text-xs font-mono font-bold uppercase tracking-[0.18em] text-[#111111] transition-all hover:border-[#111111] hover:bg-[#111111] hover:text-white cursor-pointer"
+                  >
+                    <span>{copied ? "Tersalin ✓" : "Salin Pesan"}</span>
+                  </button>
+                </div>
+
+                {!whatsappUrl && (
+                  <p className="font-mono text-[11px] leading-relaxed text-[#737373]">
+                    Nomor WhatsApp belum dikonfigurasi langsung. Silakan salin pesan di atas untuk
+                    dikirimkan secara manual.
+                  </p>
+                )}
+              </div>
+            )}
+          </div>
+
+          {/* Catatan Bawah Pratinjau */}
+          <div className="mt-8 border-t border-[#111111]/15 pt-5 text-xs text-[#737373]">
+            <p className="font-mono text-[10px] uppercase tracking-wider">
+              PRIVASI TERJAGA · TANPA REGISTRASI AKUN
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );

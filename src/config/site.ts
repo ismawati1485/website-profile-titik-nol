@@ -7,7 +7,7 @@ export const siteConfig = {
   tagline: "SEMUA HAL BERAWAL DARI NOL",
   positioning: "Ide yang jelas. Solusi yang tepat. Proses yang transparan.",
   description:
-    "TITIK NOL — studio digital untuk layanan pembuatan website dan solusi digital. Ide yang jelas. Solusi yang tepat. Proses yang transparan.",
+    "TITIK NOL — layanan pembuatan website profesional dan berkarakter. Ide yang jelas. Solusi yang tepat. Proses yang transparan.",
   contact: {
     /**
      * Nomor WhatsApp dalam format internasional tanpa tanda '+',

@@ -6,82 +6,114 @@ import { navItems, siteConfig } from "@/config/site";
 
 export function Navbar() {
   const [open, setOpen] = useState(false);
-  const pathname = useRouterState({ select: (s) => s.location.pathname });
+  const { pathname, hash } = useRouterState({
+    select: (s) => ({
+      pathname: s.location.pathname,
+      hash: s.location.hash,
+    }),
+  });
 
-  const isActive = (to: string, hash?: string) => {
-    if (hash) return pathname === to;
-    return pathname === to || (to !== "/" && pathname.startsWith(to));
+  const isItemActive = (to: string, itemHash?: string) => {
+    if (itemHash) {
+      return pathname === to && hash === `#${itemHash}`;
+    }
+    if (to === "/") {
+      return pathname === "/" && (!hash || hash === "");
+    }
+    return pathname.startsWith(to);
   };
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/90">
-      <div className="mx-auto flex h-16 w-full max-w-6xl items-center justify-between px-6">
-        <Link to="/" className="text-sm font-semibold uppercase tracking-[0.2em]">
-          {siteConfig.name}
+    <header className="sticky top-0 z-50 border-b border-[#111111]/10 bg-[#F9F9F7]/95 backdrop-blur-sm">
+      <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 sm:px-8 lg:px-12">
+        {/* Logo TITIK NOL */}
+        <Link
+          to="/"
+          className="flex shrink-0 items-center gap-3 transition-opacity hover:opacity-85"
+          aria-label={`${siteConfig.name} Beranda`}
+        >
+          <img
+            src="/logo utama.jpeg"
+            alt={siteConfig.name}
+            className="h-6 w-auto object-contain sm:h-7 md:h-8"
+          />
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
-          {navItems.map((item) => (
-            <Link
-              key={item.label}
-              to={item.to}
-              hash={"hash" in item ? item.hash : undefined}
-              className={`text-sm font-medium transition-colors ${
-                isActive(item.to, "hash" in item ? item.hash : undefined)
-                  ? "text-foreground underline underline-offset-8"
-                  : "text-muted-foreground hover:text-foreground"
-              }`}
-            >
-              {item.label}
-            </Link>
-          ))}
+        {/* Desktop Navigation */}
+        <nav className="hidden items-center gap-10 md:flex">
+          {navItems.map((item) => {
+            const itemHash = "hash" in item ? item.hash : undefined;
+            const active = isItemActive(item.to, itemHash);
+            return (
+              <Link
+                key={item.label}
+                to={item.to}
+                hash={itemHash}
+                className={`py-1 text-xs font-semibold uppercase tracking-[0.2em] transition-colors ${
+                  active
+                    ? "border-b-2 border-[#111111] font-bold text-[#111111]"
+                    : "border-b-2 border-transparent text-[#666666] hover:text-[#111111]"
+                }`}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
           <Link
             to="/"
             hash="kontak"
-            className="border border-foreground bg-foreground px-4 py-2 text-xs font-medium uppercase tracking-widest text-background transition-colors hover:bg-transparent hover:text-foreground"
+            className="inline-flex items-center gap-2 border border-[#111111] bg-[#111111] px-6 py-2.5 text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-transparent hover:text-[#111111]"
           >
-            Mulai Proyek
+            <span>MULAI PROYEK</span>
+            <span aria-hidden="true">→</span>
           </Link>
         </nav>
 
+        {/* Mobile menu trigger */}
         <button
           type="button"
           aria-label={open ? "Tutup menu" : "Buka menu"}
           aria-expanded={open}
           onClick={() => setOpen((v) => !v)}
-          className="flex h-10 w-10 items-center justify-center md:hidden"
+          className="flex h-10 w-10 items-center justify-center border border-[#111111]/15 text-[#111111] transition-colors hover:border-[#111111] md:hidden"
         >
           {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
         </button>
       </div>
 
+      {/* Mobile Drawer */}
       {open && (
-        <nav className="border-t border-border bg-background px-6 py-4 md:hidden">
-          <ul className="flex flex-col gap-1">
-            {navItems.map((item) => (
-              <li key={item.label}>
-                <Link
-                  to={item.to}
-                  hash={"hash" in item ? item.hash : undefined}
-                  onClick={() => setOpen(false)}
-                  className={`block py-2 text-sm font-medium ${
-                    isActive(item.to, "hash" in item ? item.hash : undefined)
-                      ? "text-foreground underline underline-offset-8"
-                      : "text-muted-foreground hover:text-foreground"
-                  }`}
-                >
-                  {item.label}
-                </Link>
-              </li>
-            ))}
-            <li>
+        <nav className="border-t border-[#111111]/10 bg-[#F9F9F7] px-6 py-5 md:hidden">
+          <ul className="flex flex-col gap-2">
+            {navItems.map((item) => {
+              const itemHash = "hash" in item ? item.hash : undefined;
+              const active = isItemActive(item.to, itemHash);
+              return (
+                <li key={item.label}>
+                  <Link
+                    to={item.to}
+                    hash={itemHash}
+                    onClick={() => setOpen(false)}
+                    className={`block py-2.5 text-xs font-semibold uppercase tracking-[0.2em] ${
+                      active
+                        ? "font-bold text-[#111111] underline underline-offset-8 decoration-2"
+                        : "text-[#666666] hover:text-[#111111]"
+                    }`}
+                  >
+                    {item.label}
+                  </Link>
+                </li>
+              );
+            })}
+            <li className="pt-3">
               <Link
                 to="/"
                 hash="kontak"
                 onClick={() => setOpen(false)}
-                className="mt-2 block border border-foreground bg-foreground px-4 py-2.5 text-center text-xs font-medium uppercase tracking-widest text-background"
+                className="flex items-center justify-center gap-2 border border-[#111111] bg-[#111111] px-4 py-3 text-center text-xs font-bold uppercase tracking-[0.2em] text-white transition-all hover:bg-transparent hover:text-[#111111]"
               >
-                Mulai Proyek
+                <span>MULAI PROYEK</span>
+                <span aria-hidden="true">→</span>
               </Link>
             </li>
           </ul>

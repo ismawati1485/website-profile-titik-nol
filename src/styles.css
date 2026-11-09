@@ -42,7 +42,7 @@
 }
 
 :root {
-  --radius: 0.25rem;
+  --radius: 0rem;
   /* #111111 */
   --foreground: oklch(0.178 0 0);
   /* #FFFFFF */
@@ -97,6 +97,11 @@
 @layer base {
   * {
     border-color: var(--color-border);
+  }
+
+  html,
+  body {
+    overflow-x: clip;
   }
 
   body {
